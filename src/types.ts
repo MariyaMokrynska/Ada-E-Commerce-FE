@@ -10,25 +10,60 @@ export type Product = {
     id: string;
     name: string;
     price: number;
-    quantity: number;
     stock: number;
+}
+
+export type ProductCardProps = Product & {
+    deleteProduct: (id: string) => Promise<void>;
+    updateProduct: (id: string, data: Partial<Product>) => Promise<void>;
 }
 
 export type Order = {
     id: number;
     userId: number;
-    products: Product[];
-    total: number
+    products: CartItem[];
+}
+
+export type CartItem = {
+    productId: string,
+    name: string;
+    price: number;
+    quantity: number;
 }
 
 export type CartContextType = {
-    products: Product[];
-    subtotal: number
-    
+    userId: string;
+    userEmail: string;
+    items: CartItem[];
+    subtotal: number;
+    total: number;
+    addItem: (item: CartItem) => void;
+    updateQuantity: (name: string, delta: number) => void;
+    removeItem: (name: string) => void;
+    submitOrder: () => Promise<void>;
 }
 
 export type AuthContextType = {
     user: User | null;
     login: (email: string) => Promise<void>;
     logout: () => void;
+}
+
+export type APIProduct = {
+    productId: string;
+    name: string;
+    price: number;
+    quantity: number;
+    stock: number;
+}
+export type APIOrder = {
+    id: number,
+    user_id: number,
+    items: APIOrderItem[],
+}
+export type APIOrderItem = {
+    product_id: string,
+    product_name: string,
+    product_price: number,
+    quantity: number
 }
