@@ -19,7 +19,7 @@ const ProductForm = ({addProduct}: ProductFormProps) => {
         const inputName = event.target.name;
 
         setFormState(prev => ({...prev, 
-            [inputName]: inputValue ==='price'|| inputValue === 'stock'? Number(inputValue) : inputValue}));
+            [inputName]: inputName ==='price'|| inputName === 'stock'? Number(inputValue) : inputValue}));
         
     };
     const handleSubmit = (event: React.SubmitEvent<HTMLFormElement>) => {
