@@ -5,7 +5,7 @@ type OrderListProps = {
     orders: Order[];
 }
 
-const OrderList = ({orders}: OrderListProps) => {
+const OrderList = ({ orders }: OrderListProps) => {
 
     const orderCards = orders.map((order: Order) => {
         return (
