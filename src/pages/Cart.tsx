@@ -1,13 +1,16 @@
 import { useState } from 'react';
 import { useCart } from '../Hooks/useCart';
+import { useAuth } from '../Hooks/useAuth';
+
 
 const Cart = () => {
-    const { userId, userEmail, items, subtotal, total, updateQuantity, removeItem, submitOrder } = useCart();
+    const { items, subtotal, total, updateQuantity, removeItem, submitOrder } = useCart();
+    const { user } = useAuth();
     const [status, setStatus] = useState<'idle' | 'submitting' | 'submitted' | 'error'>('idle');
 
     const handleSubmit = () => {
         setStatus('submitting');
-        submitOrder()
+        submitOrder(user)
             .then(() => setStatus('submitted'))
             .catch(() => setStatus('error'));
     };
@@ -15,8 +18,8 @@ const Cart = () => {
     return (
         <div>
             <h1>Cart</h1>
-            <p>User ID: {userId}</p>
-            <p>Email: {userEmail}</p>
+            <p>User ID: {user.id}</p>
+            <p>Email: {user.email}</p>
 
             {items.length === 0 ? (
                 <p>Your cart is empty.</p>

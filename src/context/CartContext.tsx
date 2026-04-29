@@ -1,14 +1,12 @@
 import { useState, useMemo } from 'react';
 import axios from 'axios';
-import type { CartItem } from '../types';
+import type { CartItem, User } from '../types';
 import { CartContext } from '../Hooks/useCart';
-import { useAuth } from '../Hooks/useAuth';
 
 const TAX_RATE = 0.0825;
 const orderUrl = import.meta.env.VITE_ORDER_URL;
 
 export const CartProvider = ({ children }: { children: React.ReactNode }) => {
-    const { user } = useAuth();
     const [items, setItems] = useState<CartItem[]>([]);
 
     const subtotal = useMemo(
@@ -43,7 +41,7 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
         setItems(prev => prev.filter(i => i.name !== name));
     };
 
-    const submitOrder = async (): Promise<void> => {
+    const submitOrder = async (user: User): Promise<void> => {
         return axios.post(`${orderUrl}/orders/`, {
             user_id: user?.id,
             items: items.map(({ productId, name, price, quantity }) => ({
