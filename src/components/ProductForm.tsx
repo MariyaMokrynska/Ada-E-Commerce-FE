@@ -1,20 +1,27 @@
 import '../css/ProductForm.css';
 import { useState } from 'react';
-import type { Product } from '../types'
+import type { ChangeEvent, SubmitEvent } from 'react';
+import axios from 'axios';
+import type { NewProduct } from '../types';
+
+const LAMBDA_URL = import.meta.env.VITE_LAMBDA_URL;
 
 const formDefault = {
     name: '',
     price: 0,
-    stock: 0
-}
+    stock: 0,
+    file: null as File | null,
+};
+
 type ProductFormProps = {
-    addProduct: (data: Omit<Product, 'id'>) => Promise<void>;
+    addProduct: (data: NewProduct, file: File) => Promise<void>;
 }
 
 const ProductForm = ({addProduct}: ProductFormProps) => {
     const [formState, setFormState] = useState(formDefault);
+    const [status, setStatus] = useState('idle')
 
-    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
         const inputValue = event.target.value;
         const inputName = event.target.name;
 
@@ -22,10 +29,47 @@ const ProductForm = ({addProduct}: ProductFormProps) => {
             [inputName]: inputName ==='price'|| inputName === 'stock'? Number(inputValue) : inputValue}));
         
     };
-    const handleSubmit = (event: React.SubmitEvent<HTMLFormElement>) => {
+    const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
+        const file = event.target.files?.[0] ?? null;
+        setFormState(prev => ({ ...prev, file }));
+    };
+
+    const handleSubmit = (event: SubmitEvent<HTMLFormElement>) => {
         event.preventDefault();
-        addProduct(formState);
+        if (!formState.file) return;
+
+        axios.get(`${LAMBDA_URL}?key=${formState.file.name}`)
+        .then(response => {
+            const UPLOAD_URL = response.data.presigned_url;
+            axios.put(UPLOAD_URL, formState.file, {
+                headers: { 'Content-Type': 'image/jpeg' }
+            })
+            .then(() => setStatus('success'))
+        })
+        .catch(() => {
+            setStatus('error')
+        })
+
+        addProduct({
+            name: formState.name,
+            price: formState.price,
+            stock: formState.stock,
+            s3_key: formState.file.name,
+        }, formState.file);
+
         setFormState(formDefault);
+    };
+
+    const makeControlledInput = (inputName, type) => {
+        return (
+            <input
+            type={type}
+            name={inputName}
+            id={`input-${inputName}`}
+            value={formState[inputName]}
+            onChange={handleChange}
+            />
+        );
     };
 
 return (
@@ -33,34 +77,16 @@ return (
             <h1 className="products__title">Add Product</h1>
             <form onSubmit={handleSubmit} className="products__form">
                 <label htmlFor="name">Product Name</label>
-                <input
-                    id="name"
-                    type="text"
-                    name="name"
-                    placeholder="Product name"
-                    value={formState.name}
-                    onChange={handleChange}
-                />
+                { makeControlledInput('name', "text") }
                 <label htmlFor="price">Price</label>
-                <input
-                    id="price"
-                    type="number"
-                    name="price"
-                    placeholder="Price"
-                    value={formState.price}
-                    onChange={handleChange}
-                />
+                { makeControlledInput('price', "number") }
                 <label htmlFor="stock">Stock</label>
-                <input
-                    id="stock"
-                    type="number"
-                    name="stock"
-                    placeholder="Stock"
-                    value={formState.stock}
-                    onChange={handleChange}
-                />
+                { makeControlledInput('stock', "number") }
+                <label htmlFor="image">Image</label>
+                <input type="file" name="file" accept="image/*" onChange={handleFileChange} />
                 <input type="submit" value="Add Product" />
             </form>
+            {status}
         </div>
     );
 };

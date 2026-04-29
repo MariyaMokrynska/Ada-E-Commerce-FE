@@ -11,7 +11,14 @@ export type Product = {
     name: string;
     price: number;
     stock: number;
-    imageURL: string;
+    imageUrl: string;
+}
+
+export type NewProduct = {
+    name: string;
+    price: number;
+    stock: number;
+    s3_key: string;
 }
 
 export type Order = {
@@ -34,7 +41,7 @@ export type CartContextType = {
     addItem: (item: CartItem) => void;
     updateQuantity: (name: string, delta: number) => void;
     removeItem: (name: string) => void;
-    submitOrder: () => Promise<void>;
+    submitOrder: (user: User) => Promise<void>;
     clearCart: () => void;
 }
 
@@ -50,6 +57,7 @@ export type APIProduct = {
     price: number;
     quantity: number;
     stock: number;
+    image_url: string
 }
 export type APIOrder = {
     id: number,

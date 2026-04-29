@@ -17,6 +17,7 @@ const ProductList = ({ products, removeProduct, updateProduct }: ProductListProp
           name={product.name}
           price={product.price}
           stock={product.stock}
+          imageUrl={product.imageUrl}
           deleteProduct={removeProduct}
           updateProduct={updateProduct}
         />

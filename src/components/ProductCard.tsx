@@ -20,6 +20,7 @@ const ProductCard = ({
     name,
     price,
     stock,
+    imageUrl,
     deleteProduct,
     updateProduct
 }: ProductCardProps) => {
@@ -52,7 +53,13 @@ const ProductCard = ({
 
     return (
         <div className="product-card">
-            <div className="product-card__image-placeholder">No image</div>
+            <div className="product-card__image-placeholder">
+                {
+                    imageUrl === ''? 
+                    "No Image" :
+                    <img src={imageUrl} />
+                }
+            </div>
             <h2 className="product-card__name">{name}</h2>
             <div className="product-card__meta">
                 <span>Price: ${formatter.format(price)}</span>

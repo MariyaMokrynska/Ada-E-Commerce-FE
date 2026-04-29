@@ -1,7 +1,7 @@
 import '../css/Home.css'
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import type { Product, APIProduct } from '../types';
+import type { Product, APIProduct, NewProduct } from '../types';
 import ProductList from '../components/ProductList';
 import ProductForm from '../components/ProductForm';
 import { useAuth } from '../Hooks/useAuth';
@@ -27,10 +27,11 @@ const convertFromAPI = (apiProduct: APIProduct): Product => {
     return {
         ...apiProduct,
         id: apiProduct.productId,
+        imageUrl: apiProduct.image_url,
     };
 
 };
-const addProductAPI = (newProduct: Omit<Product, 'id'>) => {
+const addProductAPI = (newProduct: NewProduct) => {
     return axios.post(`${productUrl}/products/`, newProduct)
         .then(response => response.data)
 };
@@ -58,10 +59,11 @@ const Home = () => {
             })
             .catch(() => setError('Failed to delete product'));
     }
-    const addProduct = (data: Omit<Product, 'id'>) => {
+    const addProduct = (data: NewProduct, file: File) => {
         return addProductAPI(data)
             .then((result) => {
-                return setProducts((prevProducts) => [convertFromAPI(result), ...prevProducts]);
+                const tempImageUrl = URL.createObjectURL(file);
+                return setProducts((prevProducts) => [convertFromAPI({...result, image_url:tempImageUrl}), ...prevProducts]);
             })
             .catch(() => setError('Failed to add product'));
     }
