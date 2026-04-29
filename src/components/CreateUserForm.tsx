@@ -30,7 +30,6 @@ const CreateUserForm = () => {
         e.preventDefault();
         setStatus('saving');
 
-
         if(user === null){
             axios.post(`${userUrl}/users/`, {
                 first_name: formData.firstName,
@@ -38,8 +37,8 @@ const CreateUserForm = () => {
                 email: formData.email,
                 is_admin: formData.isAdmin,
             })
-                .then(() => setStatus('saved'))
-                .catch(() => setStatus('error'));
+            .then(() => setStatus('saved'))
+            .catch(() => setStatus('error'));
         }
         else {
             axios.put(`${userUrl}/users/${user?.id}`, {
@@ -51,6 +50,13 @@ const CreateUserForm = () => {
             .then(() => setStatus('saved'))
             .catch(() => setStatus('error'));
         }
+        setFormData({
+            firstName: user?.firstName ?? '',
+            lastName: user?.lastName ?? '',
+            email: user?.email ?? '',
+            isAdmin: user?.isAdmin ?? false,
+        });
+        
     };
 
     const makeControlledInput = (inputName: string) => {
@@ -74,7 +80,7 @@ const CreateUserForm = () => {
                 { makeControlledInput('firstName') }
                 <label htmlFor="lastName">Last Name</label>
                 { makeControlledInput('lastName') }
-                <label htmlFor="email">Last Name</label>
+                <label htmlFor="email">Email</label>
                 { makeControlledInput('email') }
 
                 <div>
