@@ -23,8 +23,6 @@ const mockAuthAdmin: AuthContextType = {
 };
 
 const mockCart: CartContextType = {
-    userId: '1',
-    userEmail: 'ada@lovelace.com',
     items: [],
     subtotal: 0,
     total: 0,
@@ -32,6 +30,7 @@ const mockCart: CartContextType = {
     updateQuantity: vi.fn(),
     removeItem: vi.fn(),
     submitOrder: vi.fn(),
+    clearCart: vi.fn()
 };
 
 const mockApiProducts = [

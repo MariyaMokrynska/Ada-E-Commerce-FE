@@ -20,8 +20,6 @@ const mockAuthUser: AuthContextType = {
 };
 
 const mockCart: CartContextType = {
-    userId: '2',
-    userEmail: 'j@j.com',
     items: [],
     subtotal: 0,
     total: 0,
@@ -29,6 +27,7 @@ const mockCart: CartContextType = {
     updateQuantity: vi.fn(),
     removeItem: vi.fn(),
     submitOrder: vi.fn(),
+    clearCart: vi.fn()
 };
 
 const mockProduct = {
@@ -36,6 +35,7 @@ const mockProduct = {
     name: 'Widget',
     price: 9.99,
     stock: 50,
+    imageUrl: '',
     deleteProduct: vi.fn(),
     updateProduct: vi.fn(),
 };

@@ -59,7 +59,7 @@ const CreateUserForm = () => {
         
     };
 
-    const makeControlledInput = (inputName: string) => {
+    const makeControlledInput = (inputName: Exclude<keyof typeof formData, 'isAdmin'>) => {
         return (
             <input
             type={'text'}

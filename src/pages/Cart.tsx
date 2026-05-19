@@ -8,6 +8,8 @@ const Cart = () => {
     const { user } = useAuth();
     const [status, setStatus] = useState<'idle' | 'submitting' | 'submitted' | 'error'>('idle');
 
+    if (!user) return <p>Please log in to view your cart.</p>;
+
     const handleSubmit = () => {
         setStatus('submitting');
         submitOrder(user)

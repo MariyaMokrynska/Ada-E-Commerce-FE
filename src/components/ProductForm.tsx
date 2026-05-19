@@ -60,7 +60,7 @@ const ProductForm = ({addProduct}: ProductFormProps) => {
         setFormState(formDefault);
     };
 
-    const makeControlledInput = (inputName: string, type: string) => {
+    const makeControlledInput = (inputName: Exclude<keyof typeof formState, 'file'>, type: string) => {
         return (
             <input
             type={type}
