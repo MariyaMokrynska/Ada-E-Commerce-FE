@@ -52,7 +52,7 @@ export type AuthContextType = {
 }
 
 export type APIProduct = {
-    productId: string;
+    product_key: string;
     name: string;
     price: number;
     quantity: number;

@@ -26,7 +26,7 @@ const deleteProductAPI = (id : string) => {
 const convertFromAPI = (apiProduct: APIProduct): Product => {
     return {
         ...apiProduct,
-        id: apiProduct.productId,
+        id: apiProduct.product_key,
         imageUrl: apiProduct.image_url,
     };
 
