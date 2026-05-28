@@ -9,7 +9,7 @@ The following three microservices repos will be necessary for it to run effectiv
 2. Users Microservice (https://github.com/Ada-Activities/Ada-E-Commerce-User-Service)
 3. Orders Microservice (https://github.com/Ada-Activities/Ada-E-Commerce-Orders-Service)
 
-You will also need a pre-signed url lambda function running in AWS.
+You will also need a pre-signed url lambda function running in AWS. This solution currently works with the pre-signed url solution from the Storage lab. If your lambda has different response bodies or query parameters, you may need to tweak the lambda request in `ProductForm.tsx`
 
 For local testing, the microservices were run on the following ports:
 
