@@ -29,27 +29,18 @@ const CreateUserForm = () => {
     const handleSubmit = (e: SubmitEvent) => {
         e.preventDefault();
         setStatus('saving');
+        const method = user ? 'put' : 'post';
+        const url = user ? `${userUrl}/users/${user.id}` : `${userUrl}/users/`;
 
-        if (user === null){
-            axios.post(`${userUrl}/users/`, {
-                first_name: formData.firstName,
-                last_name: formData.lastName,
-                email: formData.email,
-                is_admin: formData.isAdmin,
-            })
-            .then(() => setStatus('saved'))
-            .catch(() => setStatus('error'));
-        }
-        else {
-            axios.put(`${userUrl}/users/${user?.id}`, {
-                first_name: formData.firstName,
-                last_name: formData.lastName,
-                email: formData.email,
-                is_admin: formData.isAdmin,
-            })
-            .then(() => setStatus('saved'))
-            .catch(() => setStatus('error'));
-        }
+        axios[method](url, {
+            first_name: formData.firstName,
+            last_name: formData.lastName,
+            email: formData.email,
+            is_admin: formData.isAdmin,
+        })
+        .then(() => setStatus('saved'))
+        .catch(() => setStatus('error'));
+
         setFormData({
             firstName: user?.firstName ?? '',
             lastName: user?.lastName ?? '',
@@ -73,7 +64,7 @@ const CreateUserForm = () => {
 
     return (
         <div>
-            <h1> Add User </h1>
+            { user ? <h1> Update User </h1> : <h1> Add User </h1> }
         
             <form onSubmit={handleSubmit}>
                 <label htmlFor="firstName">First Name</label>
